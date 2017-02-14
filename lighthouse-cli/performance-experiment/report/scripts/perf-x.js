@@ -67,9 +67,7 @@ class ConfigPanel {
       }
     });
     patternInput.addEventListener('keypress', event => {
-      if (event.keyCode === 13) {
-        addButton.click();
-      }
+      if (event.keyCode === 13) addButton.click();
     });
 
     // init tree view buttons

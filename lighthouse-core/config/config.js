@@ -67,9 +67,7 @@ function cleanTrace(trace) {
     data = evt.args && (evt.args.data || evt.args.beginData || evt.args.counters);
     frame = (evt.args && evt.args.frame) || data && (data.frame || data.page);
 
-    if (!frame) {
-      return;
-    }
+    if (!frame) return;
 
     // Increase occurences count of the frame
     name = `pid${evt.pid}-tid${evt.tid}-frame${frame}`;
@@ -110,9 +108,7 @@ function cleanTrace(trace) {
 }
 
 function validatePasses(passes, audits, rootPath) {
-  if (!Array.isArray(passes)) {
-    return;
-  }
+  if (!Array.isArray(passes)) return;
   const requiredGatherers = getGatherersNeededByAudits(audits);
 
   // Log if we are running gathers that are not needed by the audits listed in the config
@@ -130,9 +126,7 @@ function validatePasses(passes, audits, rootPath) {
   // Log if multiple passes require trace or network recording and could overwrite one another.
   const usedNames = new Set();
   passes.forEach((pass, index) => {
-    if (!pass.recordNetwork && !pass.recordTrace) {
-      return;
-    }
+    if (!pass.recordNetwork && !pass.recordTrace) return;
 
     const passName = pass.passName || Audit.DEFAULT_PASS;
     if (usedNames.has(passName)) {
@@ -146,9 +140,7 @@ function validatePasses(passes, audits, rootPath) {
 function getGatherersNeededByAudits(audits) {
   // It's possible we didn't get given any audits (but existing audit results), in which case
   // there is no need to do any work here.
-  if (!audits) {
-    return new Set();
-  }
+  if (!audits) return new Set();
 
   return audits.reduce((list, audit) => {
     audit.meta.requiredArtifacts.forEach(artifact => list.add(artifact));
@@ -192,9 +184,7 @@ function assertValidAudit(auditDefinition, auditPath) {
 }
 
 function expandArtifacts(artifacts) {
-  if (!artifacts) {
-    return null;
-  }
+  if (!artifacts) return null;
   // currently only trace logs and performance logs should be imported
   if (artifacts.traces) {
     Object.keys(artifacts.traces).forEach(key => {
@@ -289,9 +279,7 @@ class Config {
    * @return {?Array<!Audit>}
    */
   static requireAudits(audits, configPath) {
-    if (!audits) {
-      return null;
-    }
+    if (!audits) return null;
 
     const coreList = Runner.getAuditList();
     return audits.map(pathOrAuditClass => {

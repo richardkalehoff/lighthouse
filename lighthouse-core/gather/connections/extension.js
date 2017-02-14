@@ -88,9 +88,7 @@ class ExtensionConnection extends Connection {
     const tabId = this._tabId;
     return new Promise((resolve, reject) => {
       chrome.debugger.detach({tabId}, _ => {
-        if (chrome.runtime.lastError) {
-          return reject(new Error(chrome.runtime.lastError.message));
-        }
+        if (chrome.runtime.lastError) return reject(new Error(chrome.runtime.lastError.message));
         // Reload the target page to restore its state.
         chrome.tabs.reload(tabId);
         resolve();
@@ -141,9 +139,7 @@ class ExtensionConnection extends Connection {
       };
 
       chrome.tabs.query(queryOpts, (tabs => {
-        if (chrome.runtime.lastError) {
-          return reject(chrome.runtime.lastError);
-        }
+        if (chrome.runtime.lastError) return reject(chrome.runtime.lastError);
         if (tabs.length === 0) {
           const message = 'Couldn\'t resolve current tab. Please file a bug.';
           return reject(new Error(message));

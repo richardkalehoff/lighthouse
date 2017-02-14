@@ -27,9 +27,7 @@ class UserTimings extends Formatter {
     switch (type) {
       case 'pretty':
         return events => {
-          if (!Array.isArray(events)) {
-            return '';
-          }
+          if (!Array.isArray(events)) return '';
 
           const measuresStr = events.filter(e => !e.isMark).reduce((prev, event) => {
             let output = prev + `    - measure ${event.name}: \t`;

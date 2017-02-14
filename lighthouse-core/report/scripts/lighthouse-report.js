@@ -182,9 +182,7 @@ class LighthouseReport {
     // load event, however it is cross-domain and won't fire. Instead, listen
     // for a message from the target app saying "I'm open".
     window.addEventListener('message', function msgHandler(e) {
-      if (e.origin !== VIEWER_ORIGIN) {
-        return;
-      }
+      if (e.origin !== VIEWER_ORIGIN) return;
 
       if (e.data.opened) {
         popup.postMessage({lhresults: this.json}, VIEWER_ORIGIN);

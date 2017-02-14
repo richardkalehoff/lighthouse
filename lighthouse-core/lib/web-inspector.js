@@ -21,9 +21,7 @@
  * technically lives on the global object but should be accessed through a normal `require` call.
  */
 module.exports = (function() {
-  if (global.WebInspector) {
-    return global.WebInspector;
-  }
+  if (global.WebInspector) return global.WebInspector;
 
   // Global pollution.
   // Check below is to make it worker-friendly where global is worker's self.
@@ -225,9 +223,7 @@ module.exports = (function() {
 
     _onRequestStarted: function(event) {
       const request = event.data;
-      if (this._requests.has(request.url)) {
-        return;
-      }
+      if (this._requests.has(request.url)) return;
       this._requests.set(request.url, request);
     }
   };

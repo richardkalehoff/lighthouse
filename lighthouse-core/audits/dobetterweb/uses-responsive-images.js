@@ -107,9 +107,7 @@ class UsesResponsiveImages extends Audit {
     let hasWastefulImage = false;
     const DPR = contentWidth.devicePixelRatio;
     const results = images.reduce((results, image) => {
-      if (!image.networkRecord) {
-        return results;
-      }
+      if (!image.networkRecord) return results;
 
       const processed = UsesResponsiveImages.computeWaste(image, DPR);
       if (!processed) {

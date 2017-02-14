@@ -71,9 +71,7 @@ const _flatten = arr => [].concat(...arr);
 function filterConfig(config, requestedAggregations) {
   config.aggregations = config.aggregations.filter(aggregation => {
     // First filter out single `item` aggregations, which use top level name.
-    if (aggregation.items.length === 1) {
-      return requestedAggregations[aggregation.name];
-    }
+    if (aggregation.items.length === 1) return requestedAggregations[aggregation.name];
 
     // Next, filter the `items` array of aggregations with multiple sub-aggregations.
     aggregation.items = aggregation.items.filter(item => {
@@ -318,9 +316,7 @@ window.listenForStatus = function(callback) {
 
   // Show latest saved status log to give immediate feedback
   // when reopening the popup message when lighthouse is running
-  if (lighthouseIsRunning && latestStatusLog) {
-    callback(latestStatusLog);
-  }
+  if (lighthouseIsRunning && latestStatusLog) callback(latestStatusLog);
 };
 
 window.isRunning = function() {

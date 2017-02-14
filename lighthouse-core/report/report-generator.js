@@ -48,9 +48,7 @@ class ReportGenerator {
     };
 
     const getItemRating = value => {
-      if (typeof value === 'boolean') {
-        return value ? RATINGS.GOOD.label : RATINGS.POOR.label;
-      }
+      if (typeof value === 'boolean') return value ? RATINGS.GOOD.label : RATINGS.POOR.label;
       return calculateRating(value);
     };
 
@@ -77,9 +75,7 @@ class ReportGenerator {
 
     // Convert numbers to fixed point decimals
     Handlebars.registerHelper('decimal', number => {
-      if (number && number.toFixed) {
-        return number.toFixed(2);
-      }
+      if (number && number.toFixed) return number.toFixed(2);
       return number;
     });
 
@@ -116,9 +112,7 @@ class ReportGenerator {
       let arg = false;
       for (let i = 0, n = args.length - 1; i < n; i++) {
         arg = args[i];
-        if (!arg) {
-          break;
-        }
+        if (!arg) break;
       }
       return arg;
     });
@@ -256,9 +250,7 @@ class ReportGenerator {
     aggregations.forEach(aggregation => {
       // We only regroup the PWA aggregations so ignore any
       // that don't match that name, i.e. Best Practices, metrics.
-      if (!aggregation.categorizable) {
-        return;
-      }
+      if (!aggregation.categorizable) return;
 
       aggregation.score.forEach(score => {
         score.subItems.forEach(subItem => {
@@ -303,9 +295,7 @@ class ReportGenerator {
       // Use value rather than key for audit.
       audit = audits[audit];
 
-      if (!audit.extendedInfo) {
-        return;
-      }
+      if (!audit.extendedInfo) return;
       if (!audit.extendedInfo.formatter) {
         // HTML formatter not provided for this subItem
         return;

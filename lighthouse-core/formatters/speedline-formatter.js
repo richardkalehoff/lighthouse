@@ -26,9 +26,7 @@ class SpeedlineFormatter extends Formatter {
     switch (type) {
       case 'pretty':
         return function(info) {
-          if (!info || !info.timings) {
-            return '';
-          }
+          if (!info || !info.timings) return '';
 
           const output = `    - First Visual Change: ${info.timings.firstVisualChange}ms\n` +
           `    - Last Visual Change: ${info.timings.visuallyComplete}ms\n`;

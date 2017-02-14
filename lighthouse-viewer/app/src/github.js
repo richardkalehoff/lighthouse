@@ -44,9 +44,7 @@ class GithubAPI {
    * @return {!Promise<string>} id of the created gist.
    */
   createGist(jsonFile) {
-    if (this._saving) {
-      return Promise.reject(new Error('Save already in progress'));
-    }
+    if (this._saving) return Promise.reject(new Error('Save already in progress'));
 
     logger.log('Saving report to GitHub...', false);
     this._saving = true;
@@ -102,9 +100,7 @@ class GithubAPI {
       }
 
       return idb.get(id).then(cachedGist => {
-        if (cachedGist && cachedGist.etag) {
-          headers.set('If-None-Match', cachedGist.etag);
-        }
+        if (cachedGist && cachedGist.etag) headers.set('If-None-Match', cachedGist.etag);
 
         // Always make the request to see if there's newer content.
         return fetch(`https://api.github.com/gists/${id}`, {headers}).then(resp => {

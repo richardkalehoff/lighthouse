@@ -74,9 +74,7 @@ class UnusedCSSRules extends Audit {
     rules.forEach(rule => {
       const stylesheetInfo = indexedStylesheets[rule.styleSheetId];
 
-      if (!stylesheetInfo || stylesheetInfo.isDuplicate) {
-        return;
-      }
+      if (!stylesheetInfo || stylesheetInfo.isDuplicate) return;
 
       if (rule.used) {
         stylesheetInfo.used.push(rule);
@@ -134,9 +132,7 @@ class UnusedCSSRules extends Audit {
     const numUsed = stylesheetInfo.used.length;
     const numUnused = stylesheetInfo.unused.length;
 
-    if ((numUsed === 0 && numUnused === 0) || stylesheetInfo.isDuplicate) {
-      return null;
-    }
+    if ((numUsed === 0 && numUnused === 0) || stylesheetInfo.isDuplicate) return null;
 
     let url = stylesheetInfo.header.sourceURL;
     if (!url || url === pageUrl) {

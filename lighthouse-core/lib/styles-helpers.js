@@ -29,17 +29,13 @@
  * @return {!Array} A list of stylesheets that use the CSS property.
  */
 function filterStylesheetsByUsage(stylesheets, propName, propVal) {
-  if (!propName && !propVal) {
-    return [];
-  }
+  if (!propName && !propVal) return [];
   // Create deep clone of arrays so multiple calls to filterStylesheetsByUsage
   // don't alter the original artifacts in stylesheets arg.
   const deepClone = stylesheets.map(sheet => Object.assign({}, sheet));
 
   return deepClone.filter(s => {
-    if (s.isDuplicate) {
-      return false;
-    }
+    if (s.isDuplicate) return false;
 
     s.parsedContent = s.parsedContent.filter(item => {
       let usedName = '';

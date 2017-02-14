@@ -189,9 +189,7 @@ class Metrics {
     }
 
     metrics.forEach(metric => {
-      if (metric.id === 'navstart') {
-        return;
-      }
+      if (metric.id === 'navstart') return;
       if (!metric.ts) {
         log.error('pwmetrics-events', `(${metric.name}) missing timestamp. Skipping…`);
         return;

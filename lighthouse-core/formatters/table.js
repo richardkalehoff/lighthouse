@@ -29,9 +29,7 @@ class Table extends Formatter {
         return result => {
           let output = '';
 
-          if (!result || !result.results || !result.tableHeadings) {
-            return output;
-          }
+          if (!result || !result.results || !result.tableHeadings) return output;
 
           const table = Table.createTable(result.tableHeadings, result.results);
           const headings = Object.keys(result.tableHeadings).map(key => {

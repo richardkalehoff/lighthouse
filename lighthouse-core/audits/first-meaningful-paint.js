@@ -86,9 +86,7 @@ class FirstMeaningfulPaint extends Audit {
   static calculateScore(evts) {
     const getTs = evt => evt && evt.ts;
     const getTiming = evt => {
-      if (!evt) {
-        return undefined;
-      }
+      if (!evt) return undefined;
       const timing = (evt.ts - evts.navigationStart.ts) / 1000;
       return parseFloat(timing.toFixed(3));
     };

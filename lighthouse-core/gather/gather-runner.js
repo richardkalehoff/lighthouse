@@ -124,9 +124,7 @@ class GatherRunner {
    */
   static recoverOrThrow(promise) {
     return promise.catch(err => {
-      if (err.fatal) {
-        throw err;
-      }
+      if (err.fatal) throw err;
     });
   }
 
@@ -429,9 +427,7 @@ class GatherRunner {
     return passes.map(pass => {
       pass.gatherers = pass.gatherers.map(gatherer => {
         // If this is already instantiated, don't do anything else.
-        if (typeof gatherer !== 'string') {
-          return gatherer;
-        }
+        if (typeof gatherer !== 'string') return gatherer;
 
         const GathererClass = GatherRunner.getGathererClass(gatherer, rootPath);
         return new GathererClass();

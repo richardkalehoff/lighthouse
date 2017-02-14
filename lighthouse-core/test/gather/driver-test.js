@@ -28,9 +28,7 @@ const driverStub = new Driver(connection);
 
 function createOnceStub(events) {
   return (eventName, cb) => {
-    if (events[eventName]) {
-      return cb(events[eventName]);
-    }
+    if (events[eventName]) return cb(events[eventName]);
 
     throw Error(`Stub not implemented: ${eventName}`);
   };

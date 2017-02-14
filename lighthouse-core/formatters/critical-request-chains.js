@@ -68,9 +68,7 @@ class CriticalRequestChains extends Formatter {
   static _traverse(tree, cb) {
     function walk(node, depth, startTime, transferSize = 0) {
       const children = Object.keys(node);
-      if (children.length === 0) {
-        return;
-      }
+      if (children.length === 0) return;
       children.forEach(id => {
         const child = node[id];
         if (!startTime) {
@@ -211,9 +209,7 @@ class CriticalRequestChains extends Formatter {
 
     // If we get passed the opts parameter, this is Handlebars, so we
     // need to return the object back via the opts.fn so it becomes the context.
-    if (opts) {
-      return opts.fn(parsedURL);
-    }
+    if (opts) return opts.fn(parsedURL);
 
     return parsedURL;
   }

@@ -25,14 +25,10 @@ class Formatter {
 
   static get SUPPORTED_FORMATS() {
     // Get the available formatters if they don't already exist.
-    if (!this._formatters) {
-      this._getFormatters();
-    }
+    if (!this._formatters) this._getFormatters();
 
     // From the formatters we can establish a master list of supported format names.
-    if (!this._supportedFormatsNames) {
-      this._generateSupportedFormats();
-    }
+    if (!this._supportedFormatsNames) this._generateSupportedFormats();
 
     return this._supportedFormatsNames;
   }

@@ -151,9 +151,7 @@ gulp.task('deploy', cb => {
     ghpages.publish(`${DIST_FOLDER}/viewer`, {
       logger: $.util.log
     }, err => {
-      if (err) {
-        $.util.log(err);
-      }
+      if (err) $.util.log(err);
       cb();
     });
   });

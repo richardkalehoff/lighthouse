@@ -42,9 +42,7 @@ function convertImport(src) {
   jsdom.env({
     html: html,
     done: function(err, window) {
-      if (err) {
-        throw err;
-      }
+      if (err) throw err;
 
       const imports = window.document.querySelectorAll('link[rel="import"]');
       const scripts = window.document.querySelectorAll('script');
@@ -58,9 +56,7 @@ function convertImport(src) {
         scriptsContent += importToRequire(importPath, dest);
 
         // Recursively process each import.
-        if (paths[importPath]) {
-          continue;
-        }
+        if (paths[importPath]) continue;
         paths[importPath] = true;
         convertImport(importPath);
       }

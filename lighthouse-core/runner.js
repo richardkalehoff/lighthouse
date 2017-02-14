@@ -190,9 +190,7 @@ class Runner {
       // all required artifacts are in good shape, so we proceed
       return audit.audit(artifacts);
     }).catch(err => {
-      if (err.fatal) {
-        throw err;
-      }
+      if (err.fatal) throw err;
 
       // Non-fatal error become error audit result.
       return audit.generateErrorAuditResult('Audit error: ' + err.message);
@@ -262,9 +260,7 @@ class Runner {
         (category ? `${category}: ` : '') +
         `${plugin} (tried to require() from '${__dirname}' and load from '${cwdPath}'`;
 
-    if (!configDir) {
-      throw new Error(errorString + ')');
-    }
+    if (!configDir) throw new Error(errorString + ')');
 
     // Finally, try looking up relative to the config file path. Just like the
     // relative path passed to `require()` is found relative to the file it's

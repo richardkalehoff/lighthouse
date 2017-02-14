@@ -40,9 +40,7 @@ class Element {
        */
       .then(resp => {
         const attrIndex = resp.attributes.indexOf(name);
-        if (attrIndex === -1) {
-          return null;
-        }
+        if (attrIndex === -1) return null;
         return resp.attributes[attrIndex + 1];
       });
   }

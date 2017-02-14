@@ -42,9 +42,7 @@ class ComputedArtifact {
    * @return {!Promise}
    */
   request(artifact) {
-    if (this.cache.has(artifact)) {
-      return Promise.resolve(this.cache.get(artifact));
-    }
+    if (this.cache.has(artifact)) return Promise.resolve(this.cache.get(artifact));
 
     return Promise.resolve().then(_ => this.compute_(artifact)).then(computedArtifact => {
       this.cache.set(artifact, computedArtifact);

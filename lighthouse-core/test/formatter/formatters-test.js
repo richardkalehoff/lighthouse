@@ -29,9 +29,7 @@ const walkTree = new Promise((resolve, reject) => {
   const formatters = [];
 
   walker.on('file', (root, fileStats, next) => {
-    if (fileStats.name === 'formatter.js' || !fileStats.name.endsWith('.js')) {
-      return next();
-    }
+    if (fileStats.name === 'formatter.js' || !fileStats.name.endsWith('.js')) return next();
 
     formatters.push(require(root + '/' + fileStats.name));
     next();

@@ -97,9 +97,7 @@ class CriConnection extends Connection {
 
         // After aborting, we expect an ECONNRESET error. Ignore.
         request.on('error', err => {
-          if (err.code !== 'ECONNRESET') {
-            throw err;
-          }
+          if (err.code !== 'ECONNRESET') throw err;
         });
 
         // Reject on error with code specifically indicating timeout in connection setup.

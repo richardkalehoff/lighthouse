@@ -51,9 +51,7 @@ class ContentWidth extends Audit {
   }
 
   static createDebugString(match, artifact) {
-    if (match) {
-      return '';
-    }
+    if (match) return '';
 
     return 'The content scroll size is ' + artifact.scrollWidth + 'px, ' +
         'whereas the viewport size is ' + artifact.viewportWidth + 'px.';

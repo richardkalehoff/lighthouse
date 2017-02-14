@@ -168,9 +168,7 @@ class Driver {
     const domainCommand = /^(\w+)\.(enable|disable)$/.exec(method);
     if (domainCommand) {
       const enable = domainCommand[2] === 'enable';
-      if (!this._shouldToggleDomain(domainCommand[1], enable)) {
-        return Promise.resolve();
-      }
+      if (!this._shouldToggleDomain(domainCommand[1], enable)) return Promise.resolve();
     }
 
     return this._connection.sendCommand(method, params);
@@ -307,9 +305,7 @@ class Driver {
         .forEach(reg => {
           versions.forEach(ver => {
             // Ignore workers unaffiliated with this registration
-            if (ver.registrationId !== reg.registrationId) {
-              return;
-            }
+            if (ver.registrationId !== reg.registrationId) return;
 
             // Throw if service worker for this origin has active controlledClients.
             if (ver.controlledClients && ver.controlledClients.length > 0) {
@@ -329,9 +325,7 @@ class Driver {
   enableUrlUpdateIfRedirected(opts) {
     this._networkRecorder.on('requestloaded', redirectRequest => {
       // Quit if this is not a redirected request
-      if (!redirectRequest.redirectSource) {
-        return;
-      }
+      if (!redirectRequest.redirectSource) return;
       const earlierRequest = redirectRequest.redirectSource;
       if (earlierRequest.url === opts.url) {
         opts.url = redirectRequest.url;
@@ -537,9 +531,7 @@ class Driver {
         selector
       }))
       .then(element => {
-        if (element.nodeId === 0) {
-          return null;
-        }
+        if (element.nodeId === 0) return null;
         return new Element(element, this);
       });
   }
@@ -577,12 +569,8 @@ class Driver {
     if (this.isDomainEnabled('Debugger')) {
       throw new Error('Debugger domain enabled when starting trace');
     }
-    if (this.isDomainEnabled('CSS')) {
-      throw new Error('CSS domain enabled when starting trace');
-    }
-    if (this.isDomainEnabled('DOM')) {
-      throw new Error('DOM domain enabled when starting trace');
-    }
+    if (this.isDomainEnabled('CSS')) throw new Error('CSS domain enabled when starting trace');
+    if (this.isDomainEnabled('DOM')) throw new Error('DOM domain enabled when starting trace');
 
     this._devtoolsLog.reset();
     this._devtoolsLog.beginRecording();
@@ -616,9 +604,7 @@ class Driver {
       };
 
       const onChunkRead = response => {
-        if (isEOF) {
-          return;
-        }
+        if (isEOF) return;
 
         result += response.data;
 
@@ -676,17 +662,11 @@ class Driver {
   beginEmulation(flags) {
     const emulations = [];
 
-    if (!flags.disableDeviceEmulation) {
-      emulations.push(emulation.enableNexus5X(this));
-    }
+    if (!flags.disableDeviceEmulation) emulations.push(emulation.enableNexus5X(this));
 
-    if (!flags.disableNetworkThrottling) {
-      emulations.push(emulation.enableNetworkThrottling(this));
-    }
+    if (!flags.disableNetworkThrottling) emulations.push(emulation.enableNetworkThrottling(this));
 
-    if (!flags.disableCpuThrottling) {
-      emulations.push(emulation.enableCPUThrottling(this));
-    }
+    if (!flags.disableCpuThrottling) emulations.push(emulation.enableCPUThrottling(this));
 
     return Promise.all(emulations);
   }
@@ -711,9 +691,7 @@ class Driver {
    */
   goOnline(options) {
     return this.sendCommand('Network.enable').then(_ => {
-      if (!options.flags.disableNetworkThrottling) {
-        return emulation.enableNetworkThrottling(this);
-      }
+      if (!options.flags.disableNetworkThrottling) return emulation.enableNetworkThrottling(this);
 
       return emulation.disableNetworkThrottling(this);
     }).then(_ => {

@@ -39,9 +39,7 @@ const Config = require('./config/config');
 
 module.exports = function(url, flags = {}, configJSON) {
   return new Promise((resolve, reject) => {
-    if (!url) {
-      return reject(new Error('Lighthouse requires a URL'));
-    }
+    if (!url) return reject(new Error('Lighthouse requires a URL'));
 
     // set logging preferences, assume quiet
     flags.logLevel = flags.logLevel || 'error';

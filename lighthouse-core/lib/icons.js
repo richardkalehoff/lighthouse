@@ -21,12 +21,8 @@
  * @return {boolean} Does the manifest have any icons?
  */
 function doExist(manifest) {
-  if (!manifest || !manifest.icons) {
-    return false;
-  }
-  if (manifest.icons.value.length === 0) {
-    return false;
-  }
+  if (!manifest || !manifest.icons) return false;
+  if (manifest.icons.value.length === 0) return false;
   return true;
 }
 

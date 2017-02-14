@@ -107,9 +107,7 @@ function runLighthouse(url, configPath) {
  */
 function findDifference(path, actual, expected) {
   // Strict equality check, plus NaN equivalence.
-  if (Object.is(actual, expected)) {
-    return null;
-  }
+  if (Object.is(actual, expected)) return null;
 
   // If they aren't both an object we can't recurse further, so this is the difference.
   if (actual === null || expected === null || typeof actual !== 'object' ||
@@ -128,17 +126,13 @@ function findDifference(path, actual, expected) {
     const keyPath = path + keyAccessor;
     const expectedValue = expected[key];
 
-    if (!(key in actual)) {
-      return {keyPath, undefined, expectedValue};
-    }
+    if (!(key in actual)) return {keyPath, undefined, expectedValue};
 
     const actualValue = actual[key];
     const subDifference = findDifference(keyPath, actualValue, expectedValue);
 
     // Break on first difference found.
-    if (subDifference) {
-      return subDifference;
-    }
+    if (subDifference) return subDifference;
   }
 
   return null;

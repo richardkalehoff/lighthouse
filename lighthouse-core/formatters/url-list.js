@@ -27,9 +27,7 @@ class UrlList extends Formatter {
     switch (type) {
       case 'pretty':
         return resources => {
-          if (!Array.isArray(resources)) {
-            return '';
-          }
+          if (!Array.isArray(resources)) return '';
 
           let output = '';
           resources.forEach(resource => {

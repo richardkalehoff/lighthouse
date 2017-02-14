@@ -16,9 +16,7 @@ Object.keys(assert)
   .forEach(key => {
     const _origFn = assert[key];
     assert[key] = function(...args) {
-      if (currTest) {
-        currTest._assertions++;
-      }
+      if (currTest) currTest._assertions++;
       return _origFn.apply(this, args);
     };
   }

@@ -39,15 +39,9 @@ global.JSZip = {};
 global.mannwhitneyu = {};
 global.HTMLImportsLoader = {};
 global.HTMLImportsLoader.hrefToAbsolutePath = function(path) {
-  if (path === '/gl-matrix-min.js') {
-    return '../../../lib/empty-stub.js';
-  }
-  if (path === '/jszip.min.js') {
-    return '../../../lib/empty-stub.js';
-  }
-  if (path === '/mannwhitneyu.js') {
-    return '../../../lib/empty-stub.js';
-  }
+  if (path === '/gl-matrix-min.js') return '../../../lib/empty-stub.js';
+  if (path === '/jszip.min.js') return '../../../lib/empty-stub.js';
+  if (path === '/mannwhitneyu.js') return '../../../lib/empty-stub.js';
 };
 
 require('../../third_party/traceviewer-js/');
@@ -218,9 +212,7 @@ class TraceProcessor {
     mainThread.sliceGroup.topLevelSlices.forEach(slice => {
       // Discard slices outside range.
 
-      if (slice.end <= startTime || slice.start >= endTime) {
-        return;
-      }
+      if (slice.end <= startTime || slice.start >= endTime) return;
 
       // Clip any at edges of range.
       let duration = slice.duration;

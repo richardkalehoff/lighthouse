@@ -79,9 +79,7 @@ class Aggregate {
 
     // Audit resulted in an error, so doesn't contribute to score.
     // TODO: could do NaN instead, as score becomes somewhat meaningless.
-    if (result.error) {
-      return 0;
-    }
+    if (result.error) return 0;
 
     if (typeof result === 'undefined' ||
         typeof result.score === 'undefined') {
@@ -176,9 +174,7 @@ class Aggregate {
 
         // Only add to the score if this aggregation contributes to the
         // overall score.
-        if (!aggregationIsScored) {
-          return;
-        }
+        if (!aggregationIsScored) return;
 
         overallScore += Aggregate._convertToWeight(
             filteredAndRemappedResults[e],

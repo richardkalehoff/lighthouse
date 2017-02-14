@@ -63,9 +63,7 @@ function buildReportErrorLink(err) {
   let qsBody = '**Lighthouse Version**: ' + getLighthouseVersion() + '\n';
   qsBody += '**Chrome Version**: ' + getChromeVersion() + '\n';
 
-  if (siteURL) {
-    qsBody += '**URL**: ' + siteURL + '\n';
-  }
+  if (siteURL) qsBody += '**URL**: ' + siteURL + '\n';
 
   qsBody += '**Error Message**: ' + err.message + '\n';
   qsBody += '**Stack Trace**:\n ```' + err.stack + '```';
@@ -98,9 +96,7 @@ function createOptionItem(text, isChecked) {
   const input = document.createElement('input');
   input.setAttribute('type', 'checkbox');
   input.setAttribute('value', text);
-  if (isChecked) {
-    input.setAttribute('checked', 'checked');
-  }
+  if (isChecked) input.setAttribute('checked', 'checked');
 
   const label = document.createElement('label');
   label.appendChild(input);
@@ -220,9 +216,7 @@ function initPopup() {
   });
 
   chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
-    if (tabs.length === 0) {
-      return;
-    }
+    if (tabs.length === 0) return;
 
     siteURL = new URL(tabs[0].url);
 

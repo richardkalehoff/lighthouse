@@ -65,9 +65,7 @@ class Styles extends Gatherer {
   onStyleSheetAdded(styleHeader) {
     // Exclude stylesheets "injected" by extensions or ones that were added by
     // users using the "inspector".
-    if (styleHeader.header.origin !== 'regular') {
-      return;
-    }
+    if (styleHeader.header.origin !== 'regular') return;
 
     this._activeStyleHeaders[styleHeader.header.styleSheetId] = styleHeader;
     this._activeStyleSheetIds.push(styleHeader.header.styleSheetId);

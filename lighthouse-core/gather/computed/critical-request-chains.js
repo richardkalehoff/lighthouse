@@ -35,9 +35,7 @@ class CriticalRequestChains extends ComputedArtifact {
   isCritical(request) {
     // XHRs are fetched at High priority, but we exclude them, as they are unlikely to be critical
     const resourceTypeCategory = request._resourceType && request._resourceType._category;
-    if (resourceTypeCategory === WebInspector.resourceTypes.XHR._category) {
-      return false;
-    }
+    if (resourceTypeCategory === WebInspector.resourceTypes.XHR._category) return false;
 
     // Treat favicons as non-critical resources
     if (request.mimeType === 'image/x-icon' ||
@@ -114,14 +112,10 @@ class CriticalRequestChains extends ComputedArtifact {
         node = node[parentRequestId].children;
       }
 
-      if (!node) {
-        continue;
-      }
+      if (!node) continue;
 
       // If the node already exists, bail.
-      if (node[request.requestId]) {
-        continue;
-      }
+      if (node[request.requestId]) continue;
 
       // node should now point to the immediate parent for this request.
       node[request.requestId] = {

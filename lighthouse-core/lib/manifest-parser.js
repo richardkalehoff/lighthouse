@@ -66,9 +66,7 @@ function parseColor(raw) {
   const color = parseString(raw);
 
   // Finished if color missing or not a string.
-  if (color.value === undefined) {
-    return color;
-  }
+  if (color.value === undefined) return color;
 
   // Use DevTools's color parser to check CSS3 Color parsing.
   const validatedColor = validateColor(color.raw);

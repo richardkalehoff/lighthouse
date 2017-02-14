@@ -31,9 +31,7 @@ class NetworkThroughput extends ComputedArtifact {
    * @return {number}
    */
   compute_(networkRecords) {
-    if (!networkRecords || !networkRecords.length) {
-      return 0;
-    }
+    if (!networkRecords || !networkRecords.length) return 0;
 
     let totalBytes = 0;
     const timeBoundaries = networkRecords.reduce((boundaries, record) => {
