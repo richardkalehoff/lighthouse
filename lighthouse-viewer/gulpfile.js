@@ -30,7 +30,7 @@ const DIST_FOLDER = 'dist';
 
 function license() {
   return $.license('Apache', {
-    organization: 'Copyright 2016 Google Inc. All rights reserved.',
+    organization: 'Copyright 2017 Google Inc. All rights reserved.',
     tiny: true
   });
 }
