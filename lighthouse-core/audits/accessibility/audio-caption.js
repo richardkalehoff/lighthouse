@@ -32,7 +32,7 @@ class AudioCaption extends AxeAudit {
     return {
       category: 'Accessibility',
       name: 'audio-caption',
-      description: 'All `<audio>` elements contain a `<track>` element with the `kind`' +
+      description: 'All `<audio>` elements contain a `<track>` element with the `kind` ' +
           'attribute value "captions"',
       helpText: 'Captions convey information such as identifying who is speaking, dialogue, and ' +
           'non-speech information. This can help deaf or hearing impaired users access ' +
