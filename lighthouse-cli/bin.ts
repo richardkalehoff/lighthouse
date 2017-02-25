@@ -123,7 +123,7 @@ Example: --output-path=./lighthouse-results.html`,
 
   // default values
   .default('chrome-flags', '')
-  .default('disable-cpu-throttling', true)
+  .default('disable-cpu-throttling', false)
   .default('output', Printer.GetValidOutputOptions()[Printer.OutputMode.none])
   .default('output-path', 'stdout')
   .default('port', 9222)
