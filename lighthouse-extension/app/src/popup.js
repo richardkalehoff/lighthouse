@@ -124,7 +124,7 @@ function onGenerateReportButtonClick(background, selectedAggregations) {
 
   background.runLighthouseInExtension({
     flags: {
-      disableCpuThrottling: true
+      disableCpuThrottling: false
     },
     restoreCleanState: true
   }, selectedAggregations).catch(err => {
