@@ -12,7 +12,6 @@
       "viewport-dimensions",
       "theme-color",
       "manifest",
-      "accessibility",
       "image-usage",
       "accessibility"
     ]
@@ -93,6 +92,7 @@
     "accessibility/tabindex",
     "byte-efficiency/total-byte-weight",
     "byte-efficiency/unused-css-rules",
+    "byte-efficiency/unused-images",
     "byte-efficiency/uses-optimized-images",
     "byte-efficiency/uses-responsive-images",
     "dobetterweb/appcache-manifest",
@@ -391,6 +391,10 @@
     "items": [{
       "audits": {
         "unused-css-rules": {
+          "expectedValue": true,
+          "weight": 1
+        },
+        "unused-images": {
           "expectedValue": true,
           "weight": 1
         },
