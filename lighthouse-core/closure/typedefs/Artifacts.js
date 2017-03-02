@@ -75,7 +75,7 @@ Artifacts.prototype.CriticalRequestChains;
 Artifacts.prototype.Speedline;
 
 /** @type {{scrollWidth: number, viewportWidth: number}} */
-Artifacts.prototype.ContentWidth;
+Artifacts.prototype.ViewportDimensions;
 
 /** @type {!Array<string>} */
 Artifacts.prototype.CacheContents;

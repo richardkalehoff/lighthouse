@@ -23,7 +23,7 @@ const assert = require('assert');
 describe('Mobile-friendly: content-width audit', () => {
   it('fails when scroll width differs from viewport width', () => {
     const result = Audit.audit({
-      ContentWidth: {
+      ViewportDimensions: {
         scrollWidth: 100,
         viewportWidth: 300
       }
@@ -35,7 +35,7 @@ describe('Mobile-friendly: content-width audit', () => {
 
   it('passes when widths match', () => {
     return assert.equal(Audit.audit({
-      ContentWidth: {
+      ViewportDimensions: {
         scrollWidth: 300,
         viewportWidth: 300
       }

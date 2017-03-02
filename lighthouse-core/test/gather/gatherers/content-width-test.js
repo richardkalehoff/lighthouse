@@ -17,23 +17,25 @@
 
 /* eslint-env mocha */
 
-const ContentWidthGatherer = require('../../../gather/gatherers/content-width');
+const ViewportDimensionsGatherer = require('../../../gather/gatherers/viewport-dimensions');
 const assert = require('assert');
-let contentWidthGatherer;
+let gatherer;
 
-describe('Content Width gatherer', () => {
+describe('ViewportDimensions gatherer', () => {
   // Reset the Gatherer before each test.
   beforeEach(() => {
-    contentWidthGatherer = new ContentWidthGatherer();
+    gatherer = new ViewportDimensionsGatherer();
   });
 
   it('returns an artifact', () => {
-    return contentWidthGatherer.afterPass({
+    return gatherer.afterPass({
       driver: {
         evaluateAsync() {
           return Promise.resolve({
             scrollWidth: 400,
             viewportWidth: 400,
+            scrollHeight: 600,
+            viewportHeight: 600,
             devicePixelRatio: 2,
           });
         }
@@ -41,6 +43,7 @@ describe('Content Width gatherer', () => {
     }).then(artifact => {
       assert.ok(typeof artifact === 'object');
       assert.ok(artifact.viewportWidth === 400);
+      assert.ok(artifact.viewportHeight === 600);
     });
   });
 });

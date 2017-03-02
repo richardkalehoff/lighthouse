@@ -21,18 +21,21 @@ const Gatherer = require('./gatherer');
 /* global window */
 
 /* istanbul ignore next */
-function getContentWidth() {
+function getViewportDimensions() {
   // window.innerWidth to get the scrollable size of the window (irrespective of zoom)
   // window.outerWidth to get the size of the visible area
   // window.devicePixelRatio to get ratio of logical pixels to physical pixels
   return Promise.resolve({
+    scrollPosition: {x: window.scrollX, y: window.scrollY},
     scrollWidth: window.innerWidth,
+    scrollHeight: window.innerHeight,
     viewportWidth: window.outerWidth,
+    viewportHeight: window.innerHeight,
     devicePixelRatio: window.devicePixelRatio,
   });
 }
 
-class ContentWidth extends Gatherer {
+class ViewportDimensions extends Gatherer {
 
   /**
    * @param {!Object} options
@@ -41,13 +44,16 @@ class ContentWidth extends Gatherer {
   afterPass(options) {
     const driver = options.driver;
 
-    return driver.evaluateAsync(`(${getContentWidth.toString()}())`)
+    return driver.evaluateAsync(`(${getViewportDimensions.toString()}())`)
 
     .then(returnedValue => {
       if (!Number.isFinite(returnedValue.scrollWidth) ||
+          !Number.isFinite(returnedValue.scrollHeight) ||
           !Number.isFinite(returnedValue.viewportWidth) ||
+          !Number.isFinite(returnedValue.viewportHeight) ||
           !Number.isFinite(returnedValue.devicePixelRatio)) {
-        throw new Error(`ContentWidth results were not numeric: ${JSON.stringify(returnedValue)}`);
+        const results = JSON.stringify(returnedValue);
+        throw new Error(`ViewportDimensions results were not numeric: ${results}`);
       }
 
       return returnedValue;
@@ -55,4 +61,4 @@ class ContentWidth extends Gatherer {
   }
 }
 
-module.exports = ContentWidth;
+module.exports = ViewportDimensions;

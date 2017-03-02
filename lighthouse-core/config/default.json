@@ -9,11 +9,12 @@
       "url",
       "https",
       "viewport",
+      "viewport-dimensions",
       "theme-color",
       "manifest",
       "accessibility",
       "image-usage",
-      "content-width"
+      "accessibility"
     ]
   },
   {
