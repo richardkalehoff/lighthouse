@@ -25,6 +25,8 @@ const Audit = require('../audit');
 const URL = require('../../lib/url-shim');
 const Formatter = require('../../formatters/formatter');
 
+const LOAD_THRESHOLD_IN_MS = 100;
+
 class LinkBlockingFirstPaintAudit extends Audit {
 
   /**
@@ -50,7 +52,10 @@ class LinkBlockingFirstPaintAudit extends Audit {
   static computeAuditResultForTags(artifacts, tagFilter) {
     const artifact = artifacts.TagsBlockingFirstPaint;
 
-    const filtered = artifact.filter(item => item.tag.tagName === tagFilter);
+    const filtered = artifact.filter(item => {
+      return item.tag.tagName === tagFilter &&
+        (item.endTime - item.startTime) * 1000 >= LOAD_THRESHOLD_IN_MS;
+    });
 
     const startTime = filtered.reduce((t, item) => Math.min(t, item.startTime), Number.MAX_VALUE);
     let endTime = 0;
