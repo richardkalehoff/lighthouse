@@ -34,7 +34,7 @@ module.exports = [
           }
         }
       },
-      'unused-images': {
+      'offscreen-images': {
         score: false,
         extendedInfo: {
           value: {

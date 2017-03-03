@@ -16,7 +16,7 @@
 'use strict';
 
 const UnusedImages =
-    require('../../../audits/byte-efficiency/unused-images.js');
+    require('../../../audits/byte-efficiency/offscreen-images.js');
 const assert = require('assert');
 
 /* eslint-env mocha */

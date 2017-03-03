@@ -27,22 +27,23 @@ const ALLOWABLE_OFFSCREEN_Y = 200;
 
 const IGNORE_THRESHOLD_IN_BYTES = 2048;
 
-class UnusedImages extends Audit {
+class OffscreenImages extends Audit {
   /**
    * @return {!AuditMeta}
    */
   static get meta() {
     return {
       category: 'Images',
-      name: 'unused-images',
-      description: 'Unused images',
-      helpText: 'Images that are not above the fold should be lazy loaded on interaction',
+      name: 'offscreen-images',
+      description: 'Offscreen images',
+      helpText: 'Images that are not above the fold should be lazy loaded on interaction. ' +
+        'Consider using the [IntersectionObserver](https://developers.google.com/web/updates/2016/04/intersectionobserver) API.',
       requiredArtifacts: ['ImageUsage', 'ViewportDimensions', 'networkRecords']
     };
   }
 
   /**
-   * @param {{top: number, right: number, bottom: number, left: number}} imageRect
+   * @param {!ClientRect} imageRect
    * @param {{scrollWidth: number, scrollHeight: number}} viewportDimensions
    * @return {number}
    */
@@ -102,7 +103,7 @@ class UnusedImages extends Audit {
         return results;
       }
 
-      const processed = UnusedImages.computeWaste(image, viewportDimensions);
+      const processed = OffscreenImages.computeWaste(image, viewportDimensions);
       if (processed instanceof Error) {
         debugString = processed.message;
         return results;
@@ -132,4 +133,4 @@ class UnusedImages extends Audit {
   }
 }
 
-module.exports = UnusedImages;
+module.exports = OffscreenImages;

@@ -92,7 +92,7 @@
     "accessibility/tabindex",
     "byte-efficiency/total-byte-weight",
     "byte-efficiency/unused-css-rules",
-    "byte-efficiency/unused-images",
+    "byte-efficiency/offscreen-images",
     "byte-efficiency/uses-optimized-images",
     "byte-efficiency/uses-responsive-images",
     "dobetterweb/appcache-manifest",
@@ -394,7 +394,7 @@
           "expectedValue": true,
           "weight": 1
         },
-        "unused-images": {
+        "offscreen-images": {
           "expectedValue": true,
           "weight": 1
         },
