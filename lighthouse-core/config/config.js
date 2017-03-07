@@ -26,6 +26,13 @@ const path = require('path');
 const Audit = require('../audits/audit');
 const Runner = require('../runner');
 
+const _flatten = arr => [].concat(...arr);
+const _uniq = arr => Array.from(new Set(arr));
+
+const util = require('util');
+const logg = obj => console.log(util.inspect(obj, {showHidden: true, depth: null, colors: true}));
+
+
 // cleanTrace is run to remove duplicate TracingStartedInPage events,
 // and to change TracingStartedInBrowser events into TracingStartedInPage.
 // This is done by searching for most occuring threads and basing new events
@@ -113,7 +120,7 @@ function validatePasses(passes, audits, rootPath) {
   if (!Array.isArray(passes)) {
     return;
   }
-  const requiredGatherers = getGatherersNeededByAudits(audits);
+  const requiredGatherers = Config.getGatherersNeededByAudits(audits);
 
   // Log if we are running gathers that are not needed by the audits listed in the config
   passes.forEach(pass => {
@@ -141,19 +148,6 @@ function validatePasses(passes, audits, rootPath) {
     }
     usedNames.add(passName);
   });
-}
-
-function getGatherersNeededByAudits(audits) {
-  // It's possible we didn't get given any audits (but existing audit results), in which case
-  // there is no need to do any work here.
-  if (!audits) {
-    return new Set();
-  }
-
-  return audits.reduce((list, audit) => {
-    audit.meta.requiredArtifacts.forEach(artifact => list.add(artifact));
-    return list;
-  }, new Set());
 }
 
 function assertValidAudit(auditDefinition, auditPath) {
@@ -328,6 +322,90 @@ class Config {
     }
 
     return merge(baseJSON, extendJSON);
+  }
+
+  /**
+  * Filter out any unrequested aggregations from the config. If any audits are
+  * no longer needed by any remaining aggregations, filter out those as well.
+  * @param {!Object} config Lighthouse config object.
+  * @param {!Array<string>} aggregationNames Name values of aggregations to include.
+  */
+  static generateConfigOfAggregations(config, aggregationNames) {
+    config.aggregations = config.aggregations.filter(agg => aggregationNames.includes(agg.name));
+
+    const requestedAuditNames = Config.getAuditsNeededByAggregations(config.aggregations);
+
+
+    const auditPathToNameMap = Config.getMapOfAuditPathToName(config);
+
+    config.audits = config.audits.filter(auditPath =>
+        requestedAuditNames.has(auditPathToNameMap.get(auditPath)));
+
+
+    const auditObjectsSelected = Config.requireAudits(config.audits);
+    const requiredGatherers = Config.getGatherersNeededByAudits(auditObjectsSelected);
+
+    config.passes = Config.selectPassesNeededByGatherers(config.passes, requiredGatherers);
+  }
+
+  // Find audits required for remaining aggregations.
+  static getAuditsNeededByAggregations(aggregations) {
+    const requestedItems = _flatten(aggregations.map(aggregation => aggregation.items));
+    const requestedAudits = _flatten(requestedItems.map(item => Object.keys(item.audits)));
+    return new Set(requestedAudits);
+  }
+
+  /**
+   * @return {map} map from audit path (seein in config.audits) to audit.name used in config.aggregations
+   */
+  static getMapOfAuditPathToName(config) {
+    // The `audits` property in the config is a list of paths of audits to run.
+    // `requestedAuditNames` is a list of audit *names*. Map paths to names, then
+    // filter out any paths of audits with names that weren't requested.
+    const auditObjectsAll = Config.requireAudits(config.audits);
+    const auditPathToName = new Map(auditObjectsAll.map((AuditClass, index) => {
+      const auditPath = config.audits[index];
+      const auditName = AuditClass.meta.name;
+      return [auditPath, auditName];
+    }));
+    return auditPathToName;
+  }
+
+  static getGatherersNeededByAudits(audits) {
+    // It's possible we didn't get given any audits (but existing audit results), in which case
+    // there is no need to do any work here.
+    if (!audits) {
+      return new Set();
+    }
+
+    return audits.reduce((list, audit) => {
+      audit.meta.requiredArtifacts.forEach(artifact => list.add(artifact));
+      return list;
+    }, new Set());
+  }
+
+  static selectPassesNeededByGatherers(passes, requiredGatherers) {
+    const filteredPasses = passes.map(pass => {
+      // remove any unncessary gatherers
+      pass.gatherers = pass.gatherers.filter(gathererName => {
+        gathererName = GatherRunner.getGathererClass(gathererName).name;
+        return requiredGatherers.has(gathererName);
+      });
+      return pass;
+    // remove any passes lacking concrete gatherers
+    }).filter(pass => pass.gatherers.length > 0);
+
+    // handle the perf-only case (no specific gatherers, just trace & network)
+    if (filteredPasses.length === 0) {
+      if (requiredGatherers.has('traces') || requiredGatherers.has('networkRecords')) {
+        filteredPasses.push({
+          recordNetwork: requiredGatherers.has('networkRecords'),
+          recordTrace: requiredGatherers.has('traces'),
+          gatherers: []
+        });
+      }
+    }
+    return filteredPasses;
   }
 
   /**
