@@ -329,23 +329,34 @@ class Config {
   * no longer needed by any remaining aggregations, filter out those as well.
   * @param {!Object} config Lighthouse config object.
   * @param {!Array<string>} aggregationNames Name values of aggregations to include.
+  * @return {undefined} config is mutated, instead of returning
   */
   static generateConfigOfAggregations(config, aggregationNames) {
+    // 1. Filter to just the chosen aggregations
     config.aggregations = config.aggregations.filter(agg => aggregationNames.includes(agg.name));
 
+    // 2. Resolve which audits will need to run
     const requestedAuditNames = Config.getAuditsNeededByAggregations(config.aggregations);
-
-
     const auditPathToNameMap = Config.getMapOfAuditPathToName(config);
-
     config.audits = config.audits.filter(auditPath =>
         requestedAuditNames.has(auditPathToNameMap.get(auditPath)));
 
-
+    // 3. Resolve which gatherers will need to run
     const auditObjectsSelected = Config.requireAudits(config.audits);
     const requiredGatherers = Config.getGatherersNeededByAudits(auditObjectsSelected);
 
+    // 4. Filter to only the neccessary passes
     config.passes = Config.selectPassesNeededByGatherers(config.passes, requiredGatherers);
+  }
+
+  /**
+  * Filter out any unrequested aggregations from the config. If any audits are
+  * no longer needed by any remaining aggregations, filter out those as well.
+  * @param {!Object} config Lighthouse config object.
+  * @return {!Array<string>}  Name values of aggregations within
+  */
+  static getAggregationNames(config) {
+    return config.aggregations.map(agg => agg.name);
   }
 
   // Find audits required for remaining aggregations.
