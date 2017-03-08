@@ -196,7 +196,8 @@ function initPopup() {
 
       const generateReportButton = document.getElementById('generate-report');
       generateReportButton.addEventListener('click', () => {
-        onGenerateReportButtonClick(background, settings.selectedAggregations);
+        const aggregationNames = settings.selectedAggregations.filter(tag => tag.value).map(tag => tag.id);
+        onGenerateReportButtonClick(background, aggregationNames);
       });
     });
 
