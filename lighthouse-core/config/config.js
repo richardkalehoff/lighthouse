@@ -27,11 +27,6 @@ const Audit = require('../audits/audit');
 const Runner = require('../runner');
 
 const _flatten = arr => [].concat(...arr);
-const _uniq = arr => Array.from(new Set(arr));
-
-const util = require('util');
-const logg = obj => console.log(util.inspect(obj, {showHidden: true, depth: null, colors: true}));
-
 
 // cleanTrace is run to remove duplicate TracingStartedInPage events,
 // and to change TracingStartedInBrowser events into TracingStartedInPage.

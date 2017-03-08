@@ -265,53 +265,55 @@ describe('Config', () => {
     }), /generateAuditResult\(\) method/);
   });
 
-  it('expands artifacts', () => {
-    const config = new Config({
-      artifacts: {
-        traces: {
-          defaultPass: path.resolve(__dirname, '../fixtures/traces/trace-user-timings.json')
-        },
-        performanceLog: path.resolve(__dirname, '../fixtures/perflog.json')
-      }
-    });
-    const traceUserTimings = require('../fixtures/traces/trace-user-timings.json');
-    assert.deepStrictEqual(config.artifacts.traces.defaultPass.traceEvents, traceUserTimings);
-    assert.equal(config.artifacts.networkRecords.defaultPass.length, 76);
-  });
-
-  it('expands artifacts with multiple named passes', () => {
-    const config = new Config({
-      artifacts: {
-        traces: {
-          defaultPass: path.resolve(__dirname, '../fixtures/traces/trace-user-timings.json'),
-          otherPass: path.resolve(__dirname, '../fixtures/traces/trace-user-timings.json')
-        },
-        performanceLog: {
-          defaultPass: path.resolve(__dirname, '../fixtures/perflog.json'),
-          otherPass: path.resolve(__dirname, '../fixtures/perflog.json')
+  describe('artifact loading', () => {
+    it('expands artifacts', () => {
+      const config = new Config({
+        artifacts: {
+          traces: {
+            defaultPass: path.resolve(__dirname, '../fixtures/traces/trace-user-timings.json')
+          },
+          performanceLog: path.resolve(__dirname, '../fixtures/perflog.json')
         }
-      }
-    });
-    const traceUserTimings = require('../fixtures/traces/trace-user-timings.json');
-    assert.deepStrictEqual(config.artifacts.traces.defaultPass.traceEvents, traceUserTimings);
-    assert.deepStrictEqual(config.artifacts.traces.otherPass.traceEvents, traceUserTimings);
-    assert.equal(config.artifacts.networkRecords.defaultPass.length, 76);
-    assert.equal(config.artifacts.networkRecords.otherPass.length, 76);
-  });
-
-  it('handles traces with no TracingStartedInPage events', () => {
-    const config = new Config({
-      artifacts: {
-        traces: {
-          defaultPass: path.resolve(__dirname,
-                           '../fixtures/traces/trace-user-timings-no-tracingstartedinpage.json')
-        },
-        performanceLog: path.resolve(__dirname, '../fixtures/perflog.json')
-      }
+      });
+      const traceUserTimings = require('../fixtures/traces/trace-user-timings.json');
+      assert.deepStrictEqual(config.artifacts.traces.defaultPass.traceEvents, traceUserTimings);
+      assert.equal(config.artifacts.networkRecords.defaultPass.length, 76);
     });
 
-    assert.ok(config.artifacts.traces.defaultPass.traceEvents.find(
-          e => e.name === 'TracingStartedInPage' && e.args.data.page === '0xhad00p'));
+    it('expands artifacts with multiple named passes', () => {
+      const config = new Config({
+        artifacts: {
+          traces: {
+            defaultPass: path.resolve(__dirname, '../fixtures/traces/trace-user-timings.json'),
+            otherPass: path.resolve(__dirname, '../fixtures/traces/trace-user-timings.json')
+          },
+          performanceLog: {
+            defaultPass: path.resolve(__dirname, '../fixtures/perflog.json'),
+            otherPass: path.resolve(__dirname, '../fixtures/perflog.json')
+          }
+        }
+      });
+      const traceUserTimings = require('../fixtures/traces/trace-user-timings.json');
+      assert.deepStrictEqual(config.artifacts.traces.defaultPass.traceEvents, traceUserTimings);
+      assert.deepStrictEqual(config.artifacts.traces.otherPass.traceEvents, traceUserTimings);
+      assert.equal(config.artifacts.networkRecords.defaultPass.length, 76);
+      assert.equal(config.artifacts.networkRecords.otherPass.length, 76);
+    });
+
+    it('handles traces with no TracingStartedInPage events', () => {
+      const config = new Config({
+        artifacts: {
+          traces: {
+            defaultPass: path.resolve(__dirname,
+                            '../fixtures/traces/trace-user-timings-no-tracingstartedinpage.json')
+          },
+          performanceLog: path.resolve(__dirname, '../fixtures/perflog.json')
+        }
+      });
+
+      assert.ok(config.artifacts.traces.defaultPass.traceEvents.find(
+            e => e.name === 'TracingStartedInPage' && e.args.data.page === '0xhad00p'));
+    });
   });
 
   describe('#extendConfigJSON', () => {
@@ -365,6 +367,28 @@ describe('Config', () => {
       const merged = Config.extendConfigJSON(configA, configB);
       assert.equal(merged.extends, true);
       assert.equal(merged.artifacts, configB.artifacts);
+    });
+  });
+
+  describe('generateConfigOfAggregations', () => {
+    const aggregationNames = ['Performance'];
+
+    it('should filter out other passes if passed Performance', () => {
+      const runConfig = JSON.parse(JSON.stringify(defaultConfig));
+      Config.generateConfigOfAggregations(runConfig, aggregationNames);
+      assert.equal(runConfig.aggregations.length, 1, 'other aggregations are present');
+      assert.equal(runConfig.passes.length, 2, 'incorrect # of passes');
+      assert.ok(runConfig.audits.length < 15, 'audit filtering probably failed');
+    });
+
+    it('should only run audits for ones named by the aggregation', () => {
+      const runConfig = JSON.parse(JSON.stringify(defaultConfig));
+      Config.generateConfigOfAggregations(runConfig, aggregationNames);
+      const selectedAggregation = defaultConfig.aggregations
+          .find(agg => aggregationNames.includes(agg.name));
+      const auditCount = Object.keys(selectedAggregation.items[0].audits).length;
+
+      assert.equal(runConfig.audits.length, auditCount, '# of audits match aggregation list');
     });
   });
 });

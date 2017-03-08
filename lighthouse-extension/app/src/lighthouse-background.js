@@ -33,8 +33,6 @@ let disableExtensionsDuringRun = false;
 let lighthouseIsRunning = false;
 let latestStatusLog = [];
 
-const _flatten = arr => [].concat(...arr);
-
 // /**
 //  * Enables or disables all other installed chrome extensions. The initial list
 //  * of the user's extension is created when the background page is started.
