@@ -190,13 +190,15 @@ function initPopup() {
     background.listenForStatus(logStatus);
 
     background.loadSettings().then(settings => {
-      generateOptionsList(background, settings.selectedAggregations);
+      const selectedAggregations = settings.selectedAggregations;
+      generateOptionsList(background, selectedAggregations);
 
       document.querySelector('.setting-disable-extensions').checked = settings.disableExtensions;
 
       const generateReportButton = document.getElementById('generate-report');
       generateReportButton.addEventListener('click', () => {
-        const aggregationNames = settings.selectedAggregations.filter(tag => tag.value).map(tag => tag.id);
+        const aggregationNames = Object.keys(selectedAggregations)
+            .filter(key => !!selectedAggregations[key]);
         onGenerateReportButtonClick(background, aggregationNames);
       });
     });

@@ -191,28 +191,13 @@ window.createReportPageAsBlob = function(results, reportContext) {
 };
 
 /**
- * Returns list of aggregation categories (each with a list of its constituent
- * audits) from the default config.
- * @return {!Array<{name: string, audits: !Array<string>}>}
+ * Returns list of top-level aggregation categories from the default config.
+ * @return {!Array<{name: string}>}
  */
 window.getDefaultAggregations = function() {
-  return _flatten(
-    defaultConfig.aggregations.map(aggregation => {
-      if (aggregation.items.length === 1) {
-        return {
-          name: aggregation.name,
-          audits: aggregation.items[0].audits,
-        };
-      }
-
-      return aggregation.items;
-    })
-  ).map(aggregation => {
-    return {
-      name: aggregation.name,
-      audits: Object.keys(aggregation.audits)
-    };
-  });
+  return defaultConfig.aggregations.map(aggregation => ({
+    name: aggregation.name
+  }));
 };
 
 /**
