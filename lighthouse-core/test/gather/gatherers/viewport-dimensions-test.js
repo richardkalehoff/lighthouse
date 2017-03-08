@@ -32,18 +32,18 @@ describe('ViewportDimensions gatherer', () => {
       driver: {
         evaluateAsync() {
           return Promise.resolve({
-            scrollWidth: 400,
-            viewportWidth: 400,
-            scrollHeight: 600,
-            viewportHeight: 600,
+            innerWidth: 400,
+            outerWidth: 400,
+            innerHeight: 600,
+            outerHeight: 600,
             devicePixelRatio: 2,
           });
         }
       }
     }).then(artifact => {
       assert.ok(typeof artifact === 'object');
-      assert.ok(artifact.viewportWidth === 400);
-      assert.ok(artifact.viewportHeight === 600);
+      assert.ok(artifact.outerWidth === 400);
+      assert.ok(artifact.innerHeight === 600);
     });
   });
 });

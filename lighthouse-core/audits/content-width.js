@@ -40,8 +40,8 @@ class ContentWidth extends Audit {
    * @return {!AuditResult}
    */
   static audit(artifacts) {
-    const scrollWidth = artifacts.ViewportDimensions.scrollWidth;
-    const viewportWidth = artifacts.ViewportDimensions.viewportWidth;
+    const scrollWidth = artifacts.ViewportDimensions.innerWidth;
+    const viewportWidth = artifacts.ViewportDimensions.outerWidth;
     const widthsMatch = scrollWidth === viewportWidth;
 
     return ContentWidth.generateAuditResult({
@@ -55,8 +55,8 @@ class ContentWidth extends Audit {
       return '';
     }
 
-    return 'The content scroll size is ' + artifact.scrollWidth + 'px, ' +
-        'whereas the viewport size is ' + artifact.viewportWidth + 'px.';
+    return 'The content scroll size is ' + artifact.innerWidth + 'px, ' +
+        'whereas the viewport size is ' + artifact.outerWidth + 'px.';
   }
 }
 

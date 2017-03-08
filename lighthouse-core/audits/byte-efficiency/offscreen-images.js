@@ -44,16 +44,16 @@ class OffscreenImages extends Audit {
 
   /**
    * @param {!ClientRect} imageRect
-   * @param {{scrollWidth: number, scrollHeight: number}} viewportDimensions
+   * @param {{innerWidth: number, innerHeight: number}} viewportDimensions
    * @return {number}
    */
   static computeVisiblePixels(imageRect, viewportDimensions) {
-    const scrollWidth = viewportDimensions.scrollWidth;
-    const scrollHeight = viewportDimensions.scrollHeight;
+    const innerWidth = viewportDimensions.innerWidth;
+    const innerHeight = viewportDimensions.innerHeight;
 
     const top = Math.max(imageRect.top, -1 * ALLOWABLE_OFFSCREEN_Y);
-    const right = Math.min(imageRect.right, scrollWidth + ALLOWABLE_OFFSCREEN_X);
-    const bottom = Math.min(imageRect.bottom, scrollHeight + ALLOWABLE_OFFSCREEN_Y);
+    const right = Math.min(imageRect.right, innerWidth + ALLOWABLE_OFFSCREEN_X);
+    const bottom = Math.min(imageRect.bottom, innerHeight + ALLOWABLE_OFFSCREEN_Y);
     const left = Math.max(imageRect.left, -1 * ALLOWABLE_OFFSCREEN_X);
 
     return Math.max(right - left, 0) * Math.max(bottom - top, 0);
@@ -61,7 +61,7 @@ class OffscreenImages extends Audit {
 
   /**
    * @param {!Object} image
-   * @param {{scrollWidth: number, scrollHeight: number}} viewportDimensions
+   * @param {{innerWidth: number, innerHeight: number}} viewportDimensions
    * @return {?Object}
    */
   static computeWaste(image, viewportDimensions) {

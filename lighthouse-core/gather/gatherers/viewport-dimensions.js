@@ -27,10 +27,10 @@ function getViewportDimensions() {
   // window.devicePixelRatio to get ratio of logical pixels to physical pixels
   return Promise.resolve({
     scrollPosition: {x: window.scrollX, y: window.scrollY},
-    scrollWidth: window.innerWidth,
-    scrollHeight: window.innerHeight,
-    viewportWidth: window.outerWidth,
-    viewportHeight: window.innerHeight,
+    innerWidth: window.innerWidth,
+    innerHeight: window.innerHeight,
+    outerWidth: window.outerWidth,
+    outerHeight: window.outerHeight,
     devicePixelRatio: window.devicePixelRatio,
   });
 }
@@ -39,7 +39,7 @@ class ViewportDimensions extends Gatherer {
 
   /**
    * @param {!Object} options
-   * @return {!Promise<{scrollWidth: number, viewportWidth: number, devicePixelRatio: number}>}
+   * @return {!Promise<{innerWidth: number, outerWidth: number, devicePixelRatio: number}>}
    */
   afterPass(options) {
     const driver = options.driver;
@@ -47,10 +47,10 @@ class ViewportDimensions extends Gatherer {
     return driver.evaluateAsync(`(${getViewportDimensions.toString()}())`)
 
     .then(returnedValue => {
-      if (!Number.isFinite(returnedValue.scrollWidth) ||
-          !Number.isFinite(returnedValue.scrollHeight) ||
-          !Number.isFinite(returnedValue.viewportWidth) ||
-          !Number.isFinite(returnedValue.viewportHeight) ||
+      if (!Number.isFinite(returnedValue.innerWidth) ||
+          !Number.isFinite(returnedValue.innerHeight) ||
+          !Number.isFinite(returnedValue.outerWidth) ||
+          !Number.isFinite(returnedValue.outerHeight) ||
           !Number.isFinite(returnedValue.devicePixelRatio)) {
         const results = JSON.stringify(returnedValue);
         throw new Error(`ViewportDimensions results were not numeric: ${results}`);

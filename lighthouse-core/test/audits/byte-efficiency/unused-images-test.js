@@ -52,7 +52,7 @@ function generateImage(size, coords, networkRecord, src = 'https://google.com/lo
 }
 
 describe('UnusedImages audit', () => {
-  const DEFAULT_DIMENSIONS = {scrollWidth: 1920, scrollHeight: 1080};
+  const DEFAULT_DIMENSIONS = {innerWidth: 1920, innerHeight: 1080};
 
   it('handles images without network record', () => {
     const auditResult = UnusedImages.audit_({

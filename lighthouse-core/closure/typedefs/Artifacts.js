@@ -74,7 +74,7 @@ Artifacts.prototype.CriticalRequestChains;
 /** @type {{first: number, complete: number, duration: number, frames: !Array<!Object>, debugString: (string|undefined)}} */
 Artifacts.prototype.Speedline;
 
-/** @type {{scrollWidth: number, viewportWidth: number}} */
+/** @type {{innerWidth: number, outerWidth: number}} */
 Artifacts.prototype.ViewportDimensions;
 
 /** @type {!Array<string>} */
