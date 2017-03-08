@@ -4,7 +4,7 @@
 
 **Lighthouse requires Chrome 56 or later.**
 
-## Installation
+## Instalalation
 
 ### Chrome extension
 
@@ -65,8 +65,8 @@ Configuration:
                                 instability.                                        [default: 25000]
 
 Output:
-  --output       Reporter for the results
-                         [choices: "pretty", "json", "html"]                     [default: "pretty"]
+  --output       Reporter for the results, supports multiple values
+                         [choices: "none", "pretty", "json", "html"]               [default: "none"]
   --output-path  The file path to output the results
                  Example: --output-path=./lighthouse-results.html                [default: "stdout"]
 
@@ -78,19 +78,36 @@ Options:
                      installations are found                                               [boolean]
 ```
 
-##### Output Path examples
+##### Output Examples
+`lighthouse` generates
+* `./<HOST>_<DATE>.report.html`
 
-`--output-path=~/mydir/foo.out --save-assets` generates
-* `~/mydir/foo.out`
+`lighthouse --output json` generates
+* json output on `stdout`
+
+`lighthouse --output html --output-path ./report.html` generates
+* `./report.html`
+
+NOTE: specifying an output path with multiple formats ignores your specified extension for *ALL* formats
+
+`lighthouse --output json --output html --output-path ./myfile.json` generates
+* `./myfile.report.json`
+* `./myfile.report.html`
+
+`lighthouse --output json --output html` generates
+* `./<HOST>_<DATE>.report.json`
+* `./<HOST>_<DATE>.report.html`
+
+`lighthouse --output-path=~/mydir/foo.out --save-assets` generates
 * `~/mydir/foo.report.html`
 * `~/mydir/foo-0.trace.json`
 * `~/mydir/foo-0.screenshots.html`
 
-`--output-path=./report.json --output json --save-artifacts` generates
+`lighthouse --output-path=./report.json --output json --save-artifacts` generates
 * `./report.json`
 * `./report.artifacts.log`
 
-`--save-artifacts` prints a pretty report to `stdout` **and** generates
+`lighthouse --save-artifacts` generates
 * `./<HOST>_<DATE>.report.html`
 * `./<HOST>_<DATE>.artifacts.log`
 
@@ -115,7 +132,7 @@ $ lighthouse --disable-device-emulation --disable-cpu-throttling https://mysite.
 
 ## Using programmatically
 
-The example below shows how to setup and run Lighthouse programmatically as a Node module. It
+The exampl below shows how to setup and run Lighthouse programmatically as a Node module. It
 assumes you've installed Lighthouse as a dependency (`yarn add --dev lighthouse`).
 
 ```javascript
@@ -199,6 +216,7 @@ git clone https://github.com/GoogleChrome/lighthouse
 cd lighthouse
 npm install
 npm run install-all
+gulp # to precompile the handlebar templates.
 
 # The CLI is authored in TypeScript and requires compilation.
 # If you need to make changes to the CLI, run the TS compiler in watch mode:

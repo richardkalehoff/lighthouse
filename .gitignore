@@ -18,6 +18,8 @@ last-run-results.html
 *.devtoolslog.json
 *.screenshots.html
 *.report.html
+*.report.json
+*.report.pretty
 *.artifacts.log
 
 closure-error.log
@@ -35,3 +37,6 @@ lighthouse-cli/types/*.map
 /chrome-linux/
 /chrome-win32/
 /chrome.zip
+
+lighthouse-core/formatters/partials/templates/
+lighthouse-core/report/templates/*.js

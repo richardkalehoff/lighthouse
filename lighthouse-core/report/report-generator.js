@@ -19,11 +19,16 @@
 /* global Intl */
 
 const Formatter = require('../formatters/formatter');
-const Handlebars = require('handlebars');
+const Handlebars = require('handlebars/runtime');
 const handlebarHelpers = require('./handlebar-helpers');
+const reportTemplate = require('./templates/report-templates');
+const reportPartials = require('../formatters/partials/templates/report-partials');
 const fs = require('fs');
 const path = require('path');
 
+function toKebabCase(string) {
+  return string && string.replace(/([A-Z])/g, '-$1').toLowerCase();
+}
 
 class ReportGenerator {
 
@@ -38,22 +43,6 @@ class ReportGenerator {
    */
   _escapeScriptTags(jsonStr) {
     return jsonStr.replace(/<\/script>/g, '<\\/script>');
-  }
-
-  /**
-   * Gets the template for the report.
-   * @return {string}
-   */
-  getReportTemplate() {
-    return fs.readFileSync(path.join(__dirname, './templates/report-template.html'), 'utf8');
-  }
-
-  /**
-   * Gets the template for any exceptions.
-   * @return {string}
-   */
-  getExceptionTemplate() {
-    return fs.readFileSync(path.join(__dirname, './templates/exception.html'), 'utf8');
   }
 
   /**
@@ -133,7 +122,7 @@ class ReportGenerator {
    * @return {string} HTML of the exception page.
    */
   renderException(err, results) {
-    const template = Handlebars.compile(this.getExceptionTemplate());
+    const template = reportTemplate.report.templates.exception;
     return template({
       errMessage: err.message,
       errStack: err.stack,
@@ -164,7 +153,10 @@ class ReportGenerator {
         Handlebars.registerHelper(helpers);
       }
 
-      Handlebars.registerPartial(audit.name, formatter.getFormatter('html'));
+      const partials = reportPartials.report.partials;
+      const partialName = toKebabCase(audit.extendedInfo.formatter);
+      const partial = partials[partialName] || partials['null-formatter'];
+      Handlebars.registerPartial(audit.name, Handlebars.template(partial));
     });
   }
 
@@ -186,7 +178,8 @@ class ReportGenerator {
       });
     });
 
-    const template = Handlebars.compile(this.getReportTemplate());
+    const template = Handlebars.template(reportTemplate.report.templates['report-template']);
+
     return template({
       url: results.url,
       lighthouseVersion: results.lighthouseVersion,
