@@ -189,26 +189,31 @@ function initPopup() {
 
     background.listenForStatus(logStatus);
 
+    // generate checkboxes from saved settings
     background.loadSettings().then(settings => {
-      const selectedAggregations = settings.selectedAggregations;
-      generateOptionsList(background, selectedAggregations);
-
+      generateOptionsList(background, settings.selectedAggregations);
       document.querySelector('.setting-disable-extensions').checked = settings.disableExtensions;
+    });
 
-      const generateReportButton = document.getElementById('generate-report');
-      generateReportButton.addEventListener('click', () => {
+    // bind Generate Report button
+    const generateReportButton = document.getElementById('generate-report');
+    generateReportButton.addEventListener('click', () => {
+      background.loadSettings().then(settings => {
+        const selectedAggregations = settings.selectedAggregations;
         const aggregationNames = Object.keys(selectedAggregations)
             .filter(key => !!selectedAggregations[key]);
         onGenerateReportButtonClick(background, aggregationNames);
       });
     });
 
+    // bind View Options button
     const generateOptionsEl = document.getElementById('configure-options');
     const optionsEl = document.querySelector('.options');
     generateOptionsEl.addEventListener('click', () => {
       optionsEl.classList.add(subpageVisibleClass);
     });
 
+    // bind Save Options button
     const okButton = document.getElementById('ok');
     okButton.addEventListener('click', () => {
       // Save settings when options page is closed.
